@@ -1,0 +1,12 @@
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "Mathias Millet", email = "mathias@mmill.eu"},
+]
+dependencies = []
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "AGPL"}
+
