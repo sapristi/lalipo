@@ -5,7 +5,13 @@ description = ""
 authors = [
     {name = "Mathias Millet", email = "mathias@mmill.eu"},
 ]
-dependencies = []
+dependencies = [
+    "django>=4.2.6",
+    "spotipy>=2.23.0",
+    "python-dotenv>=1.0.0",
+    "django-allauth>=0.57.0",
+    "django-extensions>=3.2.3",
+]
 requires-python = ">=3.11"
 readme = "README.md"
 license = {text = "AGPL"}

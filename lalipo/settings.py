@@ -39,10 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_extensions',
+
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.spotify',
+
+    'lalipo',
+    'gen_playlist',
 ]
 
 MIDDLEWARE = [
@@ -143,12 +148,10 @@ AUTHENTICATION_BACKENDS = [
 # Provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
     'spotify': {
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
         'APP': {
             'client_id': os.environ["SPOTIFY_CLIENT_ID"],
             'secret': os.environ["SPOTIFY_CLIENT_SECRET"],
-        }
+        },
+        "SCOPE": ["playlist-modify-public","playlist-modify-private"]
     }
 }
