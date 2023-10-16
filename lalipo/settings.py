@@ -32,6 +32,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+
+    'lalipo',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,8 +49,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.spotify',
 
-    'lalipo',
-    'gen_playlist',
+    'bulma',
+
 ]
 
 MIDDLEWARE = [
@@ -66,9 +69,10 @@ ROOT_URLCONF = 'lalipo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        "DIRS": [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
+            "debug": True,
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -123,11 +127,13 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -145,13 +151,16 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
-# Provider specific settings
-SOCIALACCOUNT_PROVIDERS = {
-    'spotify': {
-        'APP': {
-            'client_id': os.environ["SPOTIFY_CLIENT_ID"],
-            'secret': os.environ["SPOTIFY_CLIENT_SECRET"],
-        },
-        "SCOPE": ["playlist-modify-public","playlist-modify-private"]
-    }
-}
+# # Provider specific settings
+# SOCIALACCOUNT_PROVIDERS = {
+#     'spotify': {
+#         'APP': {
+#             'client_id': os.environ["SPOTIFY_CLIENT_ID"],
+#             'secret': os.environ["SPOTIFY_CLIENT_SECRET"],
+#         },
+#         "SCOPE": ["playlist-modify-public","playlist-modify-private"]
+#     }
+# }
+
+LOGIN_REDIRECT_URL = "/"
+SOCIALACCOUNT_STORE_TOKENS = True

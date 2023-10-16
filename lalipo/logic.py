@@ -1,19 +1,13 @@
-import dotenv
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-import typer
-import logging
 from enum import Enum
-from typing import Literal
 
 
-dotenv.load_dotenv()
-scope = "playlist-modify-public,playlist-modify-private"
-
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
+# scope = "playlist-modify-public,playlist-modify-private"
+# sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 
 
-def make_playlist(title):
+def make_playlist(sp, title):
     playlist = sp.user_playlist_create(
         user=sp.current_user()["id"],
         name=title
@@ -21,7 +15,7 @@ def make_playlist(title):
     return playlist
 
 
-def get_tracks_from_plages_musicales(input: str):
+def get_tracks_from_plages_musicales(sp, input: str):
     for line in input.splitlines():
         artist, title = line.split("\t")
         if title.startswith("single  :"):
@@ -42,7 +36,7 @@ def get_tracks_from_plages_musicales(input: str):
                 yield track
 
 
-def get_tracks_from_stoned_circus(input: str):
+def get_tracks_from_stoned_circus(sp, input: str):
     for line in input.splitlines():
         artist = ""
         track = ""
@@ -76,5 +70,3 @@ class Source(Enum):
 def main(source: Source, value: str):
     for val in source.val(value):
         print(val)
-
-typer.run(main)

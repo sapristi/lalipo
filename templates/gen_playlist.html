@@ -1,0 +1,12 @@
+{% extends 'bulma/base.html' %}
+{% load bulma_tags %}
+
+{% block content %}
+<h1>Local Library Home</h1>
+<!-- <form action="/your-name/" method="post"> -->
+<form action="{% url 'generate_playlist' %}" method="post">
+    {% csrf_token %}
+    {{ form | bulma }}
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}

@@ -16,10 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from gen_playlist.views import gen_playlist_view
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path("", gen_playlist_view),
+    path("", views.input_playlist_view, name="input_playlist"),
+    path("generate/", views.generate_playlist_view, name="generate_playlist"),
 ]

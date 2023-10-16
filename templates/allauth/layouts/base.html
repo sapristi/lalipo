@@ -1,0 +1,48 @@
+{% load i18n static bulma_tags %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{% static 'bulma/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>
+      {% block head_title %}
+      {% endblock head_title %}
+    </title>
+    {% block extra_head %}
+    {% endblock extra_head %}
+  </head>
+  <body>
+    {% block body %}
+    {% if messages %}
+    <div>
+      <strong>{% trans "Messages:" %}</strong>
+      <ul>
+        {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+    <section class="hero is-primary">
+      <div class="hero-body">
+        <div style="display: flex; justify-content: space-between">
+          <div>
+            <p class="title">
+              Lalipo
+            </p>
+            <p class="subtitle">
+              Spotify playlist generator
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {% block content %}
+    {% endblock content %}
+    {% endblock body %}
+    {% block extra_body %}
+    {% endblock extra_body %}
+  </body>
+</html>
