@@ -13,6 +13,7 @@ dependencies = [
     "django-extensions>=3.2.3",
     "django-bulma>=0.8.3",
     "setuptools>=68.2.2",
+    "pydantic>=2.4.2",
 ]
 requires-python = ">=3.11"
 readme = "README.md"

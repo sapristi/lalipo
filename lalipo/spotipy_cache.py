@@ -1,5 +1,5 @@
 from spotipy.cache_handler import CacheHandler
-from spotipy.oauth2 import SpotifyAuthBase
+from spotipy.oauth2 import SpotifyAuthBase, SpotifyOauthError
 from allauth.socialaccount.models import SocialToken, SocialApp
 from datetime import datetime
 import logging
@@ -149,7 +149,7 @@ class CustomAuth(SpotifyAuthBase):
         if "scope" not in token_info or not self._is_scope_subset(
                 self.scope, token_info["scope"]
         ):
-            return None
+            raise Exception("Unexpected token scope")
 
         if self.is_token_expired(token_info):
             token_info = self.refresh_access_token(

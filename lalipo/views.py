@@ -49,7 +49,7 @@ def generate_playlist_view(request):
 
     print(sp.current_user())
 
-    if input_type == InputType.plages_musicales:
+    if input_type == InputType.plages_musicales.name:
         tracks = get_tracks_from_plages_musicales(sp, raw_text)
     else:
         tracks = get_tracks_from_stoned_circus(sp, raw_text)
@@ -66,6 +66,6 @@ def generate_playlist_view(request):
             break
         sp.playlist_add_items(
             playlist_id=playlist["id"],
-            items=[t["uri"] for t in tracks_batch]
+            items=[t.uri for t in tracks_batch]
         )
     return HttpResponse()
