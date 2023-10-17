@@ -15,6 +15,9 @@ import six
 import six.moves.urllib.parse as urllibparse
 from six.moves.urllib_parse import parse_qsl, urlparse
 
+from django.conf import settings
+from functools import wraps
+from types import FunctionType
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +25,11 @@ class SparisonCacheHandler(CacheHandler):
 
     def __init__(self, user):
         self.spotify_object = SocialToken.objects.get(account__provider="spotify", account__user=user)
-        self.spotify_app = SocialApp.objects.first()
+        spotify_app = SocialApp.objects.first()
+        if spotify_app:
+            self.scope = " ".join(spotify_app.settings["SCOPE"])
+        else:
+            self.scope = " ".join(settings.SOCIALACCOUNT_PROVIDERS["spotify"]["SCOPE"])
 
     def get_cached_token(self):
         # retrieve the token info from the `SocialToken` object
@@ -32,7 +39,7 @@ class SparisonCacheHandler(CacheHandler):
         token_info["access_token"] = self.spotify_object.token
         token_info["refresh_token"] = self.spotify_object.token_secret
         token_info["expires_at"] = int(self.spotify_object.expires_at.timestamp())
-        token_info["scope"] = " ".join(self.spotify_app.settings["SCOPE"])
+        token_info["scope"] = self.scope
 
         return token_info
 
@@ -52,6 +59,26 @@ def _make_authorization_headers(client_id, client_secret):
         six.text_type(client_id + ":" + client_secret).encode("ascii")
     )
     return {"Authorization": "Basic %s" % auth_header.decode("ascii")}
+
+
+def wrapper(method):
+    @wraps(method)
+    def wrapped(*args, **kwargs):
+        class_name = args[0].__class__.__name__
+        func_name = method.__name__
+        print('calling {}.{}()... '.format(class_name, func_name))
+        return method(*args, **kwargs)
+    return wrapped
+
+class MetaClass(type):
+    def __new__(meta, classname, bases, classDict):
+        newClassDict = {}
+        for attributeName, attribute in classDict.items():
+            if isinstance(attribute, FunctionType):
+                # replace it with a wrapped version
+                attribute = wrapper(attribute)
+            newClassDict[attributeName] = attribute
+        return type.__new__(meta, classname, bases, newClassDict)
 
 class CustomAuth(SpotifyAuthBase):
     """
@@ -149,7 +176,7 @@ class CustomAuth(SpotifyAuthBase):
         if "scope" not in token_info or not self._is_scope_subset(
                 self.scope, token_info["scope"]
         ):
-            raise Exception("Unexpected token scope")
+            raise Exception(f"Unexpected token scope:\n{self.scope}\n{token_info['scope']}")
 
         if self.is_token_expired(token_info):
             token_info = self.refresh_access_token(

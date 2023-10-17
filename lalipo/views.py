@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import View
 from django import forms
+from django.conf import settings
 from enum import Enum
 from allauth.socialaccount.models import SocialApp
 import itertools
@@ -27,7 +28,6 @@ class FirstForm(forms.Form):
 
 # Create your views here.
 def input_playlist_view(request):
-    print("R", request.user, dir(request.user))
     form = FirstForm()
     return render(request, "gen_playlist.html", {"form": form})
 
@@ -37,12 +37,22 @@ def generate_playlist_view(request):
     raw_text = request.POST["raw_text"]
     input_type = request.POST["input_type"]
     spotify_app = SocialApp.objects.first()
+
+    if spotify_app:
+        client_id=spotify_app.client_id
+        client_secret=spotify_app.secret
+        scope=spotify_app.settings["SCOPE"]
+    else:
+        client_id = settings.SOCIALACCOUNT_PROVIDERS["spotify"]["APP"]["client_id"]
+        client_secret = settings.SOCIALACCOUNT_PROVIDERS["spotify"]["APP"]["secret"]
+        scope=settings.SOCIALACCOUNT_PROVIDERS["spotify"]["SCOPE"]
+
     sp = Spotify(
         client_credentials_manager=CustomAuth(
-            client_id=spotify_app.client_id,
-            client_secret=spotify_app.secret,
+            client_id=client_id,
+            client_secret=client_secret,
             redirect_uri="http://localhost:8000",
-            scope=spotify_app.settings["SCOPE"],
+            scope=scope,
             cache_handler=SparisonCacheHandler(user=request.user),
         )
     )
