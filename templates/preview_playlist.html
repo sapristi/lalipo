@@ -1,0 +1,29 @@
+{% extends 'bulma/base.html' %}
+{% load bulma_tags %}
+
+{% block content %}
+<div style="display: flex; justify-content: center">
+  <div>
+  <table class="table is-striped is-hoverable">
+    <thead>
+      <tr>
+        <th>Artist</th>
+        <th>Track</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for track in tracks %}
+      <tr>
+        <td>{{track.artists.0.name}}</td>
+        <td>{{track.name}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <form action="{% url 'create_playlist' %}" method="post">
+    {% csrf_token %}
+    <input class="button is-primary is-outlined form-button" type="submit" value="Create playlist">
+  </form>
+  </div>
+</div>
+{% endblock %}

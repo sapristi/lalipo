@@ -21,28 +21,28 @@
   <div class="hero-body">
     <div style="display: flex; justify-content: space-between">
       <div>
-        <p class="title">
-          Lalipo
-        </p>
-        <p class="subtitle">
-          Spotify playlist generator
-        </p>
+        <a href="{% url 'input_playlist' %}">
+          <p class="title" >
+            Lalipo
+          </p>
+          <p class="subtitle">
+            Spotify playlist generator
+          </p>
+        </a>
       </div>
       <div>
         {% if request.user.is_anonymous %}
-        {% url 'account_login' as login_url %}
-        <a class="navbar-item" href="{{ login_url }}">
+        <a class="navbar-item" href="{% url 'account_login' %}">
           Login
         </a>
         {% else %}
-        {% url 'account_logout' as logout_url %}
         <div class="navbar-item has-dropdown is-hoverable">
           <div class="navbar-item">
             Logged in as {{request.user}}
           </div>
 
           <div class="navbar-dropdown is-boxed">
-            <a class="navbar-item" href="{{ logout_url }}">
+            <a class="navbar-item" href="{% url 'account_logout' %}">
               Log out
             </a>
           </div>
