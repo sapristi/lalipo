@@ -97,17 +97,23 @@ def get_tracks_from_stoned_circus(sp, input: str):
             track = Track(**results["items"][0])
             yield track
 
-class Source(Enum):
-    stoned_circus = (get_tracks_from_stoned_circus,)
-    plages_musicales = (get_tracks_from_plages_musicales,)
+def get_tracks_tab_separated(sp, input: str):
+    for line in input.splitlines():
+        artist, track = line.split("\t", maxsplit=1)
+        results = sp.search(q=f"artist:{artist} track:{track}", type="track")["tracks"]
+        if len(results["items"]) == 0:
+            print(f"Failed to find track for {artist} - {track}")
+        else:
+            track = Track(**results["items"][0])
+            print("FOUND TRACK", track)
+            yield track
 
-    def __init__(self, val):
-        self.val = val
-
-    @property
-    def value(self):
-        return self.name
-
-def main(source: Source, value: str):
-    for val in source.val(value):
-        print(val)
+def get_tracks_simple(sp, input: str):
+    for line in input.splitlines():
+        results = sp.search(q=line, type="track")["tracks"]
+        if len(results["items"]) == 0:
+            print(f"Failed to find track for {line}")
+        else:
+            track = Track(**results["items"][0])
+            print("FOUND TRACK", track)
+            yield track
