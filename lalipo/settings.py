@@ -15,6 +15,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+STATE_DIR = Path(os.environ.get("STATE_DIR", BASE_DIR / "runtime"))
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,6 +28,8 @@ if os.environ.get("DEBUG", "").lower() == "true":
     ALLOWED_HOSTS = []
     print("Running in dev mode")
 
+    if not STATE_DIR.exists():
+        STATE_DIR.mkdir()
 else:
     SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
     DEBUG = False
@@ -35,9 +38,10 @@ else:
     if EXTRA_HOSTS := os.environ.get("EXTRA_HOSTS"):
         ALLOWED_HOSTS.extend(EXTRA_HOSTS.split(","))
     print("Running in prod mode")
+    if not STATE_DIR.exists():
+        raise Exception(f"State dir {STATE_DIR} does not exist")
 
 # Application definition
-
 INSTALLED_APPS = [
 
     'lalipo',
@@ -99,7 +103,7 @@ WSGI_APPLICATION = 'lalipo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': STATE_DIR / 'db.sqlite3',
     }
 }
 
@@ -141,6 +145,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+STATIC_ROOT = STATE_DIR / "static"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
