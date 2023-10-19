@@ -1,7 +1,7 @@
 [project]
-name = ""
-version = ""
-description = ""
+name = "lalipo"
+version = "0.1"
+description = "Spotify playlist generator"
 authors = [
     {name = "Mathias Millet", email = "mathias@mmill.eu"},
 ]
