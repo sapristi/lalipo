@@ -23,3 +23,7 @@ license = {text = "AGPL"}
 dev = [
     "ipython>=8.16.1",
 ]
+
+[tool.pdm.scripts]
+manage.env = {DEBUG = "True"}
+manage.cmd = "./manage.py"
