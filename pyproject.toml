@@ -14,6 +14,7 @@ dependencies = [
     "django-bulma>=0.8.3",
     "setuptools>=68.2.2",
     "pydantic>=2.4.2",
+    "gunicorn>=21.2.0",
 ]
 requires-python = ">=3.11"
 readme = "README.md"
@@ -23,3 +24,7 @@ license = {text = "AGPL"}
 dev = [
     "ipython>=8.16.1",
 ]
+
+[tool.pdm.scripts]
+manage.cmd = "./manage.py"
+gunicorn.cmd = "gunicorn lalipo.wsgi:application"
