@@ -19,4 +19,5 @@ if "CREDENTIALS_DIRECTORY" in os.environ:
     print(f"Loading credentials from {creds_dir}")
     for creds_file in creds_dir.iterdir():
         os.environ[creds_file.name] = creds_file.read_text()
+
 application = get_wsgi_application()

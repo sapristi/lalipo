@@ -2,9 +2,15 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
+if "CREDENTIALS_DIRECTORY" in os.environ:
+    creds_dir = Path(os.environ["CREDENTIALS_DIRECTORY"])
+    print(f"Loading credentials from {creds_dir}")
+    for creds_file in creds_dir.iterdir():
+        os.environ[creds_file.name] = creds_file.read_text()
 
 
 def main():
