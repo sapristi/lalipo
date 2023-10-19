@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
 
 import os
 from pathlib import Path
+from whitenoise import WhiteNoise
 
 from django.core.wsgi import get_wsgi_application
 
@@ -21,3 +22,4 @@ if "CREDENTIALS_DIRECTORY" in os.environ:
         os.environ[creds_file.name] = creds_file.read_text()
 
 application = get_wsgi_application()
+application = WhiteNoise(application, root=os.environ["STATE_DIRECTORY"]+"/static")
