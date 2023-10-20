@@ -36,7 +36,7 @@ else:
     ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
     HOST = os.environ["HOST"]
     ALLOWED_HOSTS.append(HOST)
-    CSRF_TRUSTED_ORIGINS = HOST
+    CSRF_TRUSTED_ORIGINS = [HOST]
 
     # TODO: set SECURE_PROXY_SSL_HEADER
     print("Running in prod mode")
