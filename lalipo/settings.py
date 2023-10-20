@@ -24,6 +24,7 @@ if os.environ.get("DEBUG", "").lower() == "true":
     DEBUG = True
     SECRET_KEY = 'django-insecure-e6o)7^k@a=kwn=#)+8+#r)2+c-u2n6w(syecmsp2c_68*j5ch1'
     ALLOWED_HOSTS = []
+    HOST = "http://localhost:8000"
     print("Running in dev mode")
 
     if not STATE_DIR.exists():
@@ -33,8 +34,9 @@ else:
     DEBUG = False
 
     ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
-    if EXTRA_HOSTS := os.environ.get("EXTRA_HOSTS"):
-        ALLOWED_HOSTS.extend(EXTRA_HOSTS.split(","))
+    HOST = os.environ["HOST"]
+    ALLOWED_HOSTS.append(HOST)
+    CSRF_TRUSTED_ORIGINS = HOST
 
     # TODO: set SECURE_PROXY_SSL_HEADER
     print("Running in prod mode")

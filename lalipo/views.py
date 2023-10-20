@@ -65,7 +65,7 @@ def generate_playlist_view(request):
         client_credentials_manager=CustomAuth(
             client_id=client_id,
             client_secret=client_secret,
-            redirect_uri="http://localhost:8000",
+            redirect_uri=settings.HOST,
             scope=scope,
             cache_handler=SparisonCacheHandler(user=request.user),
         )
