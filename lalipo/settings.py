@@ -43,6 +43,7 @@ else:
     if not STATE_DIR.exists():
         raise Exception(f"State dir {STATE_DIR} does not exist")
 
+SITE_ID = 1
 # Application definition
 INSTALLED_APPS = [
 
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     'django_extensions',
 
