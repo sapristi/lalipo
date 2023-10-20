@@ -36,14 +36,13 @@ else:
     ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
     HOST = os.environ["HOST"]
     ALLOWED_HOSTS.append(HOST)
-    CSRF_TRUSTED_ORIGINS = [HOST]
+    CSRF_TRUSTED_ORIGINS = [f"https://{HOST}"]
 
     # TODO: set SECURE_PROXY_SSL_HEADER
     print("Running in prod mode")
     if not STATE_DIR.exists():
         raise Exception(f"State dir {STATE_DIR} does not exist")
 
-SITE_ID = 1
 # Application definition
 INSTALLED_APPS = [
 
@@ -55,7 +54,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
 
     'django_extensions',
 
