@@ -11,11 +11,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import os
-from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-STATE_DIR = Path(os.environ.get("STATE_DIRECTORY", BASE_DIR / "runtime"))
+from .setup_project import BASE_DIR, STATE_DIR
 
 
 # Quick-start development settings - unsuitable for production
@@ -37,6 +35,8 @@ else:
     ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
     if EXTRA_HOSTS := os.environ.get("EXTRA_HOSTS"):
         ALLOWED_HOSTS.extend(EXTRA_HOSTS.split(","))
+
+    # TODO: set SECURE_PROXY_SSL_HEADER
     print("Running in prod mode")
     if not STATE_DIR.exists():
         raise Exception(f"State dir {STATE_DIR} does not exist")

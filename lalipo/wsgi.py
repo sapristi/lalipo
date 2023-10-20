@@ -12,6 +12,7 @@ from pathlib import Path
 from whitenoise import WhiteNoise
 
 from django.core.wsgi import get_wsgi_application
+from .setup_project import STATE_DIR
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lalipo.settings')
 
@@ -22,4 +23,4 @@ if "CREDENTIALS_DIRECTORY" in os.environ:
         os.environ[creds_file.name] = creds_file.read_text()
 
 application = get_wsgi_application()
-application = WhiteNoise(application, root=os.environ["STATE_DIRECTORY"]+"/static")
+application = WhiteNoise(application, root=STATE_DIR / "static")
