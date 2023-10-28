@@ -10,7 +10,7 @@ from django.urls import reverse
 from spotipy import Spotify
 
 from lalipo.spotipy_cache import SparisonCacheHandler, CustomAuth
-from lalipo.logic import (
+from lalipo.spotify_helpers import (
     get_tracks_from_plages_musicales, get_tracks_from_stoned_circus, get_tracks_tab_separated,
     get_tracks_simple
 )
