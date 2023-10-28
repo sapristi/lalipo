@@ -2,28 +2,30 @@
 {% load bulma_tags %}
 
 {% block content %}
-<div style="display: flex; justify-content: center">
+<div style="display: flex; justify-content: center; gap: 10%">
+  <div style="flex: 1">
+    <table class="table is-striped is-hoverable is-fullwidth">
+      <thead>
+        <tr>
+          <th>Artist</th>
+          <th>Track</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for track in tracks %}
+        <tr>
+          <td>{{track.artists.0.name}}</td>
+          <td>{{track.name}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
   <div>
-  <table class="table is-striped is-hoverable">
-    <thead>
-      <tr>
-        <th>Artist</th>
-        <th>Track</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for track in tracks %}
-      <tr>
-        <td>{{track.artists.0.name}}</td>
-        <td>{{track.name}}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  <form action="{% url 'create_playlist' %}" method="post">
-    {% csrf_token %}
-    <button class="button is-primary my-button " type="submit"><div>Create playlist</div></button>
-  </form>
+    <form action="{% url 'create_playlist' %}" method="post">
+      {% csrf_token %}
+      <button class="button is-primary my-button " type="submit"><div>Create playlist</div></button>
+    </form>
   </div>
 </div>
 {% endblock %}

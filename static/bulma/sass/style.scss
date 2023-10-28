@@ -22,8 +22,9 @@ $info: $secondary;
 $success: $mint;
 
 $body-background-color: $background;
-// Custom color example
-$primary-invert: findColorInvert($primary);
+/* $primary-invert: findColorInvert($primary); */
+$primary-invert: rgba(0,0,0,0.7);
+
 $secondary-invert: findColorInvert($secondary);
 $custom-colors: (
   "primary": ($primary, $primary-invert),
@@ -33,6 +34,18 @@ $custom-colors: (
 
 $footer-background-color: $secondary;
 $footer-color: $secondary-invert;
+$footer-padding: 3rem 1.5rem 3rem;
+
+@import "./node_modules/bulma/sass/utilities/functions";
+
+/* $table-head-background-color: bulmaDarken($background, 5%); */
+$table-head-background-color: bulmaLighten($secondary, 10%);
+
+$table-striped-row-even-background-color: bulmaDarken($background, 5%);
+$table-background-color: bulmaLighten($background, 5%);
+
+$table-striped-row-even-hover-background-color: $primary;
+$table-row-hover-background-color: $primary;
 // 3. Import the rest of Bulma
 @import "./node_modules/bulma/sass/utilities/derived-variables";
 @import "./node_modules/bulma/bulma";
@@ -178,4 +191,37 @@ a.navbar-item:hover {
     0, 0, 1, 0,
     0, 0, 0, 1
   );
+}
+
+.table {
+  /* box-shadow: 0.4em 0.3em $black-ter, 0.3em 0.3em 1em $secondary; */
+  /* box-shadow:  0.3em 0.3em $secondary; */
+  border: solid $secondary;
+  border-width: 0.1em 0.3em 0.3em 0.1em;
+}
+
+
+.footer {
+  box-shadow: -5px -6px  $black-ter;
+  transform: matrix3d(
+    1, 0, 0, 0.0001,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 0.7
+  );
+}
+
+.footer *:first-child{
+  transform: matrix3d(
+    1, 0, 0, -0.0001,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    0, 0, 0, 1.01
+  );
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
