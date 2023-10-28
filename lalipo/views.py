@@ -15,7 +15,6 @@ from lalipo.spotify_helpers import (
     get_tracks_simple
 )
 
-
 class InputType(str, Enum):
     simple = "Simple"
     tab_separated = "Tab separated"

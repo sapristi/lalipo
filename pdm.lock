@@ -6,7 +6,7 @@ groups = ["default", "dev"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:9fb961f7a625b0dddd97e5b49cd0de24b21af8c1ccb3c2657b37719eb6bd5cbd"
+content_hash = "sha256:15391f7257b7637f3590c85e5475659fe835cefb25f1b4ba94eafafee932274a"
 
 [[package]]
 name = "annotated-types"
@@ -270,6 +270,19 @@ dependencies = [
 files = [
     {file = "django-extensions-3.2.3.tar.gz", hash = "sha256:44d27919d04e23b3f40231c4ab7af4e61ce832ef46d610cc650d53e68328410a"},
     {file = "django_extensions-3.2.3-py3-none-any.whl", hash = "sha256:9600b7562f79a92cbf1fde6403c04fee314608fefbb595502e34383ae8203401"},
+]
+
+[[package]]
+name = "django-types"
+version = "0.19.1"
+requires_python = ">=3.7,<4.0"
+summary = "Type stubs for Django"
+dependencies = [
+    "types-psycopg2>=2.9.21.13",
+]
+files = [
+    {file = "django_types-0.19.1-py3-none-any.whl", hash = "sha256:b3f529de17f6374d41ca67232aa01330c531bbbaa3ac4097896f31ac33c96c30"},
+    {file = "django_types-0.19.1.tar.gz", hash = "sha256:5ae7988612cf6fbc357b018bbc3b3a878b65e04275cc46e0d35d66a708daff12"},
 ]
 
 [[package]]
@@ -697,6 +710,15 @@ summary = "Traitlets Python configuration system"
 files = [
     {file = "traitlets-5.11.2-py3-none-any.whl", hash = "sha256:98277f247f18b2c5cabaf4af369187754f4fb0e85911d473f72329db8a7f4fae"},
     {file = "traitlets-5.11.2.tar.gz", hash = "sha256:7564b5bf8d38c40fa45498072bf4dc5e8346eb087bbf1e2ae2d8774f6a0f078e"},
+]
+
+[[package]]
+name = "types-psycopg2"
+version = "2.9.21.14"
+summary = "Typing stubs for psycopg2"
+files = [
+    {file = "types-psycopg2-2.9.21.14.tar.gz", hash = "sha256:bf73a0ac4da4e278c89bf1b01fc596d5a5ac7a356cfe6ac0249f47b9e259f868"},
+    {file = "types_psycopg2-2.9.21.14-py3-none-any.whl", hash = "sha256:cd9c5350631f3bc6184ec8d48f2ed31d4ea660f89d0fffe78239450782f383c5"},
 ]
 
 [[package]]

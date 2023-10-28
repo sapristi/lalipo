@@ -24,6 +24,7 @@ license = {text = "AGPL"}
 [tool.pdm.dev-dependencies]
 dev = [
     "ipython>=8.16.1",
+    "django-types>=0.19.1",
 ]
 
 [tool.pdm.scripts]
