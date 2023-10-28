@@ -97,22 +97,16 @@ def get_tracks_from_stoned_circus(sp, input: str):
             track = Track(**results["items"][0])
             yield track
 
-def get_tracks_tab_separated(sp, input: str):
+def get_tracks_auto(sp, input: str):
     for line in input.splitlines():
-        artist, track = line.split("\t", maxsplit=1)
-        results = sp.search(q=f"artist:{artist} track:{track}", type="track")["tracks"]
-        if len(results["items"]) == 0:
-            print(f"Failed to find track for {artist} - {track}")
+        if "\t" in line:
+            artist, track = line.split("\t", maxsplit=1)
+            search_term = f"artist:{artist} track:{track}"
         else:
-            track = Track(**results["items"][0])
-            print("FOUND TRACK", track)
-            yield track
-
-def get_tracks_simple(sp, input: str):
-    for line in input.splitlines():
-        results = sp.search(q=line, type="track")["tracks"]
+            search_term = line
+        results = sp.search(q=search_term, type="track")["tracks"]
         if len(results["items"]) == 0:
-            print(f"Failed to find track for {line}")
+            print(f"Failed to find track for '{search_term}'")
         else:
             track = Track(**results["items"][0])
             print("FOUND TRACK", track)

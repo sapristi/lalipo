@@ -11,13 +11,12 @@ from spotipy import Spotify
 
 from lalipo.spotipy_cache import SparisonCacheHandler, CustomAuth
 from lalipo.spotify_helpers import (
-    get_tracks_from_plages_musicales, get_tracks_from_stoned_circus, get_tracks_tab_separated,
-    get_tracks_simple
+    get_tracks_from_plages_musicales, get_tracks_from_stoned_circus,
+    get_tracks_auto
 )
 
 class InputType(str, Enum):
-    simple = "Simple"
-    tab_separated = "Tab separated"
+    auto = "Auto"
     stoned_circus = "Stoned circus"
     plages_musicales = "Plages musicales"
 
@@ -28,15 +27,14 @@ class FirstForm(forms.Form):
         choices=[(v.name, v.value) for v in InputType],
         widget=forms.RadioSelect,
     )
-    preview_only = forms.BooleanField(
-        help_text="Preview result before creating playlist",
+    no_preview = forms.BooleanField(
+        help_text="Create playlist without preview",
         required=False
     )
 
 
-# Create your views here.
 def input_playlist_view(request):
-    form = FirstForm(initial={"input_type": InputType.simple.name})
+    form = FirstForm(initial={"input_type": InputType.auto.name})
     return render(request, "gen_playlist.html", {"form": form})
 
 
@@ -47,7 +45,7 @@ def generate_playlist_view(request):
     input_type = form.cleaned_data["input_type"]
     title = form.cleaned_data["title"]
     raw_text = form.cleaned_data["raw_text"]
-    preview_only = form.cleaned_data["preview_only"]
+    no_preview = form.cleaned_data["no_preview"]
 
     spotify_app = SocialApp.objects.first()
 
@@ -71,10 +69,8 @@ def generate_playlist_view(request):
     )
 
     match input_type:
-        case InputType.simple.name:
-            tracks = get_tracks_simple(sp, raw_text)
-        case InputType.tab_separated.name:
-            tracks = get_tracks_tab_separated(sp, raw_text)
+        case InputType.auto.name:
+            tracks = get_tracks_auto(sp, raw_text)
         case InputType.plages_musicales.name:
             tracks = get_tracks_from_plages_musicales(sp, raw_text)
         case InputType.stoned_circus.name:
@@ -83,7 +79,7 @@ def generate_playlist_view(request):
             print(f"Could not parse '{input_type}'")
             return HttpResponse(status=400)
 
-    if preview_only:
+    if not no_preview:
         if tracks is None:
             tracks = []
         tracks = list(tracks)
@@ -110,8 +106,17 @@ def generate_playlist_view(request):
 
 def preview_playlist_view(request):
     tracks = request.POST["tracks"]
-
     return render(request, "preview_playlist.html", {"tracks": tracks})
+
+def preview_playlist_test_view(request):
+    return render(request, "preview_playlist.html", {"tracks": [
+        {"name": "some longer test1", "artists": [{"name": "artist1"}]},
+        {"name": "test1", "artists": [{"name": "artist1"}]},
+        {"name": "even way longer very very test1", "artists": [{"name": "artist1"}]},
+        {"name": "test1", "artists": [{"name": "artist1"}]},
+        {"name": "test1", "artists": [{"name": "artist1 with a long name"}]},
+        {"name": "test1"*10, "artists": [{"name": "artist1 what if it's so long it goes out"}]},
+    ]})
 
 
 def create_playlist_view(request):
