@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://kit.fontawesome.com/9f08d0db9d.js" crossorigin="anonymous"></script>
   <title>{% block title %}{% endblock title %}</title>
   {% block css %}
     {% font_awesome %}
     <link rel="stylesheet" href="{% static 'bulma/css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'style.css' %}">
     {% block extra_css %}{% endblock extra_css %}
   {% endblock css %}
 </head>
@@ -17,33 +17,40 @@
 {% block header %}
 {% endblock header %}
 
-<section class="hero is-primary">
+<section class="hero is-secondary">
   <div class="hero-body">
     <div style="display: flex; justify-content: space-between">
-      <div>
-        <a href="{% url 'input_playlist' %}">
+      <a href="{% url 'input_playlist' %}" class="main-title">
+        <div class="">
           <p class="title" >
             Lalipo
           </p>
           <p class="subtitle">
             Spotify playlist generator
           </p>
+          </div>
         </a>
-      </div>
       <div>
         {% if request.user.is_anonymous %}
-        <a class="navbar-item" href="{% url 'spotify_login' %}">
-          Login
+        <a class="button is-primary" href="{% url 'spotify_login' %}">
+          <div>
+            Login
+          </div>
         </a>
+
         {% else %}
         <div class="navbar-item has-dropdown is-hoverable">
-          <div class="navbar-item">
-            Logged in as {{request.user}}
+          <div class="navbar-item navbar-item-skew">
+            <div>
+              Logged in as <span class="has-text-weight-semibold">  <i class="fa-brands fa-spotify"></i> {{request.user}} </span>
+            </div>
           </div>
 
           <div class="navbar-dropdown is-boxed">
-            <a class="navbar-item" href="{% url 'account_logout' %}">
-              Log out
+            <a class="navbar-item  button is-primary" href="{% url 'account_logout' %}">
+              <div>
+                <i class="fa-solid fa-door-open"></i> Log out
+              </div>
             </a>
           </div>
         </div>
@@ -57,17 +64,19 @@
 <section class="section">
   <div class="container">
     {% block messages %}
-      {% if messages %}
-        <div class="messages columns is-desktop">
-          <div class="column is-4 is-offset-4">
-            {% for message in messages %}
-              <div class="message {% if message.tags %}is-{{ message.tags|bulma_message_tag }}{% endif %}">
-                <div class="message-body">{{ message }}</div>
-              </div>
-            {% endfor %}
-          </div>
-        </div>
-      {% endif %}
+    {% if messages %}
+    <div class="messages columns is-desktop">
+      <div class="column is-4 is-offset-4">
+        <ul class="block-list">
+          {% for message in messages %}
+          <li class="custom-message {% if message.tags %}is-{{ message.tags|bulma_message_tag }}{% endif %} is-centered">
+            <div>{{ message }}</div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    {% endif %}
     {% endblock messages %}
 
     {% block content_area %}
@@ -84,8 +93,11 @@
     <div class="container">
       <div class="content has-text-centered">
         <p>
-          <a class="icon" href="https://github.com/sapristi/lalipo">
-            <i class="fab fa-github"></i>
+          <a class="icon-text" href="https://github.com/sapristi/lalipo">
+            <span class="icon">
+              <i class="fab fa-github"></i>
+            </span>
+            Lalipo
           </a>
         </p>
       </div>

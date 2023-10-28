@@ -11,7 +11,7 @@ You need to <a href="{% url 'spotify_login' %}">login</a> before you can continu
     {% csrf_token %}
   {{ form | bulma }}
 
-  <input class="button is-primary is-outlined form-button" type="submit" value="Generate playlist">
+  <button class="button is-primary my-button " type="submit"><div>Generate playlist</div></button>
 </form>
 {% endif %}
 {% endblock %}

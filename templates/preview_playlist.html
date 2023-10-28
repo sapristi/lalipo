@@ -22,7 +22,7 @@
   </table>
   <form action="{% url 'create_playlist' %}" method="post">
     {% csrf_token %}
-    <input class="button is-primary is-outlined form-button" type="submit" value="Create playlist">
+    <button class="button is-primary my-button " type="submit"><div>Create playlist</div></button>
   </form>
   </div>
 </div>

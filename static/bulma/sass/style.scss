@@ -1,0 +1,174 @@
+// 1. Import the initial variables
+@import "./node_modules/bulma/sass/utilities/initial-variables";
+
+// 2. Set yourown initial variables
+
+
+// https://paletton.com/#uid=33t0r0kmduncBKBhX-Ur-sntrlU
+$saffron: #F2C14A;
+$astral: #35779Aff;
+$osalmon: #F2774A;
+$limon: #c0ff2e;
+$evening-see: #2a6350;
+$grenadine: #fa84e9;
+$rose-bud: #b45ca4;
+$mint: #00DA93;
+
+$primary: $osalmon;
+$secondary: $astral;
+
+$info: $secondary;
+$success: $mint;
+
+$body-background-color: $saffron;
+// Custom color example
+$primary-invert: findColorInvert($primary);
+$secondary-invert: findColorInvert($secondary);
+$custom-colors: (
+  "primary": ($primary, $primary-invert),
+  "secondary": ($secondary, $secondary-invert),
+);
+
+
+$footer-background-color: $secondary;
+$footer-color: $secondary-invert;
+// 3. Import the rest of Bulma
+@import "./node_modules/bulma/sass/utilities/derived-variables";
+@import "./node_modules/bulma/bulma";
+@import "./node_modules/bulma-block-list/src/block-list";
+
+// 4. Import your stuff here
+.main-title {
+  transform: matrix3d(
+    1, 0.05, 3, 0,
+    0, 1, 1, -0.005,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  );
+  box-shadow: 6px 6px $black-ter;
+  height: 100%;
+  background-color: $primary;
+  padding: 10px;
+}
+
+.main-title > * {
+  transform: matrix3d(
+    1, -0.05, -3, 0,
+    0, 1, -1, 0.005,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  );
+}
+
+.button {
+  transform: matrix3d(
+    1, -0.05, 0, 0,
+    0, 1, -0.1, -0.005,
+    0, 0, 1, 1,
+    0, 0, 0, 1
+  );
+  padding: 5px;
+
+  box-shadow: 3px 2px  $black-ter;
+}
+
+.button div:first-child {
+  transform: matrix3d(
+    1, 0.05, -3, 0,
+    0, 1, -1, 0.005,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  );
+}
+
+.hero {
+  transform: skew(-15deg, -0.5deg);
+  margin-top: 30px;
+  margin-left: 30px;
+  margin-right: 30px;
+
+  box-shadow: 6px 10px $black-ter;
+}
+
+.hero-body {
+  transform: skew(15deg, 0.5deg);
+}
+form>.button {
+  display: block;
+  margin: auto;
+}
+
+.navbar-item-skew {
+  background-color: $primary;
+  transform: matrix3d(
+    1, -0.05, 0, 0,
+    0, 1, -0.1, -0.005,
+    0, 0, 1, 1,
+    0, 0, 0, 1
+  );
+  padding: 5px;
+
+  box-shadow: 3px 2px  $black-ter;
+}
+
+.navbar-item-skew:hover{
+  background-color: bulmaDarken($primary, 2.5%) !important;
+}
+.navbar-item-skew div:first-child{
+  transform: matrix3d(
+    1, 0.05, -3, 0,
+    0, 1, -1, 0.005,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  );
+}
+
+.navbar-dropdown {
+  background-color: transparent;
+  box-shadow: none !important;
+}
+
+a.navbar-item:hover {
+  background-color: $primary !important;
+}
+
+.message {
+  transform: matrix3d(
+    1, 0.02, 0, 0,
+    0, 1, 0.2, 0.002,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  );
+}
+.message-body {
+  border-width: 4px;
+}
+
+.message-body div:first-child{
+  text-align: center;
+  transform: matrix3d(
+    1, -0.02, 0, 0,
+    0, 1, -0.2, -0.002,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  );
+}
+
+.custom-message {
+  transform: matrix3d(
+    1, 0.02, 0, 0,
+    0, 1, 0.2, 0.002,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  );
+  box-shadow: -2px 3px  $black-ter;
+}
+
+.custom-message div:first-child{
+  transform: matrix3d(
+    1, -0.02, 0, 0,
+    0, 1, -0.2, -0.002,
+    0, 0, 1, 0,
+    0, 0, 0, 1
+  );
+}
