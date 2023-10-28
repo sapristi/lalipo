@@ -5,7 +5,7 @@
 
 {% if request.user.is_anonymous %}
 
-You need to <a href="{% url 'spotify_login' %}">login</a> before you can continue.
+  <div style="display: flex; align-items: center; gap: 0.3em;">You need to <a href="{% url 'spotify_login' %}" class="button is-primary"><div>login</div></a> before you can continue.</div>
 {% else %}
 <form action="{% url 'generate_playlist' %}" method="post">
     {% csrf_token %}

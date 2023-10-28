@@ -9,9 +9,18 @@
 <form method="post">
   {% csrf_token %}
   <div style="display: flex; align-items: center">
-    <button class="button is-primary" type="submit">Connect</button>
+    <button class="button is-primary" type="submit"><div>Connect</div></button>
     <div> with your Spotify account.</div>
   </div>
+  <div class="message is-info" style=" margin: 3em;">
+    <div class="message-body">
+      <div>
+        <p>Lalipo needs access to your spotify account, in order to create playlists on your behalf.</p>
+        <p>The access will only be used for the intended purpose. Once you log out, the stored credentials will be deleted.</p>
+      </div>
+    </div>
+  </ul>
+
 </form>
 
 {% endblock content %}

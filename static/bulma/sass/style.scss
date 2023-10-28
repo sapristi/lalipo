@@ -16,11 +16,12 @@ $mint: #00DA93;
 
 $primary: $osalmon;
 $secondary: $astral;
+$background: $saffron;
 
 $info: $secondary;
 $success: $mint;
 
-$body-background-color: $saffron;
+$body-background-color: $background;
 // Custom color example
 $primary-invert: findColorInvert($primary);
 $secondary-invert: findColorInvert($secondary);
@@ -134,21 +135,27 @@ a.navbar-item:hover {
 
 .message {
   transform: matrix3d(
-    1, 0.02, 0, 0,
-    0, 1, 0.2, 0.002,
+    1, 0.001, 0, 0,
+    0, 1, 0.2, 0.001,
     0, 0, 1, 0,
     0, 0, 0, 1
   );
+
+  box-shadow: 0.4em 0.3em  $black-ter;
 }
 .message-body {
   border-width: 4px;
+  background-color: bulmaDarken($background, 10%);
+}
+.message.is-info .message-body {
+  color: bulmaDarken($info, 5%);
 }
 
 .message-body div:first-child{
   text-align: center;
   transform: matrix3d(
-    1, -0.02, 0, 0,
-    0, 1, -0.2, -0.002,
+    1, -0.001, 0, 0,
+    0, 1, -0.2, -0.001,
     0, 0, 1, 0,
     0, 0, 0, 1
   );
