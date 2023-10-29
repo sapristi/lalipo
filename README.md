@@ -1,6 +1,6 @@
-# Lalipo
-
 ![banner](./assets/lalipo_banner.png)
+
+# Lalipo - https://lalipo.mmill.eu
 
 Lalipo is made to generate spotify playlists from raw text, for example from this input,
 
