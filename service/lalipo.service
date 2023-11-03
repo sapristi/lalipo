@@ -1,0 +1,20 @@
+[Unit]
+Description=Lalipo
+Requires=lalipo.socket
+After=network.target
+
+[Service]
+Type=notify
+DynamicUser=yes
+StateDirectory=lalipo
+WorkingDirectory=/opt/lalipo
+ExecStartPre=/opt/lalipo/.venv/bin/python manage.py collectstatic --no-input
+ExecStartPre=/opt/lalipo/.venv/bin/python manage.py migrate
+ExecStart=/opt/lalipo/.venv/bin/gunicorn lalipo.wsgi:application --access-logfile -
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target
