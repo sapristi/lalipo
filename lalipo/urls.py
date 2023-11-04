@@ -21,9 +21,9 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path("", views.input_playlist_view, name="input_playlist"),
+    path("", views.playlist_input_view, name="playlist_input"),
     path("generate/", views.generate_playlist_view, name="generate_playlist"),
-    path("preview/", views.preview_playlist_view, name="preview_playlist"),
+    # path("preview/", views.preview_playlist_view, name="preview_playlist"),
     path("preview_test/", views.preview_playlist_test_view, name="preview_playlist_test"),
     path("create/", views.create_playlist_view, name="create_playlist"),
 ]

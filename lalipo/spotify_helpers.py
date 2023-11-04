@@ -1,14 +1,37 @@
-from enum import Enum
 import pydantic
+import itertools
 
+from django.conf import settings
+from allauth.socialaccount.models import SocialApp
+from spotipy import Spotify
+from lalipo.spotipy_cache import SparisonCacheHandler, CustomAuth
 
+class SpotifyApp:
+    def __init__(self):
+        self.scope = ['playlist-modify-public', 'playlist-modify-private']
 
-def make_playlist(sp, title):
-    playlist = sp.user_playlist_create(
-        user=sp.current_user()["id"],
-        name=title
-    )
-    return playlist
+        spotify_app = SocialApp.objects.first()
+        if spotify_app:
+            self.client_id=spotify_app.client_id
+            self.client_secret=spotify_app.secret
+        else:
+            self.client_id = settings.SOCIALACCOUNT_PROVIDERS["spotify"]["APP"]["client_id"]
+            self.client_secret = settings.SOCIALACCOUNT_PROVIDERS["spotify"]["APP"]["secret"]
+
+    def for_user(self, user):
+        sp = Spotify(
+            client_credentials_manager=CustomAuth(
+                client_id=self.client_id,
+                client_secret=self.client_secret,
+                redirect_uri=settings.HOST,
+                scope=self.scope,
+                cache_handler=SparisonCacheHandler(user=user),
+            )
+        )
+        return sp
+
+spotify_app = SpotifyApp()
+
 
 class BaseModel(pydantic.BaseModel):
     class Config:
@@ -111,3 +134,25 @@ def get_tracks_auto(sp, input: str):
             track = Track(**results["items"][0])
             print("FOUND TRACK", track)
             yield track
+
+
+
+def create_playlist(sp, title, track_uris):
+
+    playlist = sp.user_playlist_create(
+        user=sp.current_user()["id"],
+        name=title
+    )
+    print("MADE playlist", playlist)
+
+    track_uris_gen = (track_uri for track_uri in track_uris)
+    while True:
+        tracks_batch = list(itertools.islice(track_uris_gen, 100))
+        if len(tracks_batch) == 0:
+            break
+        sp.playlist_add_items(
+            playlist_id=playlist["id"],
+            items=[track_uri for track_uri in tracks_batch]
+        )
+
+    return playlist

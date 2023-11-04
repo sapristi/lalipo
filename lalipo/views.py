@@ -1,18 +1,16 @@
-from django.http import HttpResponse
+from enum import Enum
+import json
+
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django import forms
-from django.conf import settings
-from enum import Enum
-from allauth.socialaccount.models import SocialApp
-import itertools
 from django.urls import reverse
+from django.contrib import messages
+from django.utils.safestring import mark_safe
 
-from spotipy import Spotify
-
-from lalipo.spotipy_cache import SparisonCacheHandler, CustomAuth
 from lalipo.spotify_helpers import (
     get_tracks_from_plages_musicales, get_tracks_from_stoned_circus,
-    get_tracks_auto
+    get_tracks_auto, spotify_app, create_playlist
 )
 
 class InputType(str, Enum):
@@ -22,8 +20,9 @@ class InputType(str, Enum):
 
 class FirstForm(forms.Form):
     title = forms.CharField(label="Playlist title")
-    raw_text = forms.CharField(widget=forms.Textarea)
+    raw_text = forms.CharField(widget=forms.Textarea(attrs={"placeholder": "Ping floyd shine on you\nYom picnic in tchernobyl"}))
     input_type = forms.ChoiceField(
+        label="Custom input type",
         choices=[(v.name, v.value) for v in InputType],
         widget=forms.RadioSelect,
     )
@@ -33,9 +32,13 @@ class FirstForm(forms.Form):
     )
 
 
-def input_playlist_view(request):
-    form = FirstForm(initial={"input_type": InputType.auto.name})
-    return render(request, "gen_playlist.html", {"form": form})
+def playlist_input_view(request):
+    input_type_str = request.GET.get("input_type", "Auto")
+    input_type = InputType(input_type_str)
+    no_preview_str = request.GET.get("no_preview", "false")
+    no_preview = no_preview_str.lower() == "true"
+    form = FirstForm(initial={"input_type": input_type.name, "no_preview": no_preview})
+    return render(request, "playlist_input.html", {"form": form})
 
 
 def generate_playlist_view(request):
@@ -47,26 +50,7 @@ def generate_playlist_view(request):
     raw_text = form.cleaned_data["raw_text"]
     no_preview = form.cleaned_data["no_preview"]
 
-    spotify_app = SocialApp.objects.first()
-
-    if spotify_app:
-        client_id=spotify_app.client_id
-        client_secret=spotify_app.secret
-        scope=spotify_app.settings["SCOPE"]
-    else:
-        client_id = settings.SOCIALACCOUNT_PROVIDERS["spotify"]["APP"]["client_id"]
-        client_secret = settings.SOCIALACCOUNT_PROVIDERS["spotify"]["APP"]["secret"]
-        scope=settings.SOCIALACCOUNT_PROVIDERS["spotify"]["SCOPE"]
-
-    sp = Spotify(
-        client_credentials_manager=CustomAuth(
-            client_id=client_id,
-            client_secret=client_secret,
-            redirect_uri=settings.HOST,
-            scope=scope,
-            cache_handler=SparisonCacheHandler(user=request.user),
-        )
-    )
+    sp = spotify_app.for_user(request.user)
 
     match input_type:
         case InputType.auto.name:
@@ -85,28 +69,23 @@ def generate_playlist_view(request):
         tracks = list(tracks)
         print("TRACKS", tracks)
 
-        return render(request, "preview_playlist.html", {"tracks": tracks})
+        tracks_json = json.dumps([track.uri for track in tracks])
+        return render(request, "preview_playlist.html", {
+            "title": title,
+            "tracks": tracks,
+            "tracks_json": tracks_json,
+        })
 
-    playlist = sp.user_playlist_create(
-        user=sp.current_user()["id"],
-        name=title
-    )
-    print("MADE playlist", playlist)
-
-    while True:
-        tracks_batch = list(itertools.islice(tracks, 100))
-        if len(tracks_batch) == 0:
-            break
-        sp.playlist_add_items(
-            playlist_id=playlist["id"],
-            items=[t.uri for t in tracks_batch]
-        )
+    playlist = create_playlist(sp, title=title, track_uris=[t.uri for t in tracks])
+    print("PLAYLIST", playlist)
+    messages.success(request, "Playlist created.")
     return redirect(reverse("input_playlist"))
-
 
 def preview_playlist_view(request):
     tracks = request.POST["tracks"]
-    return render(request, "preview_playlist.html", {"tracks": tracks})
+    tracks_json = json.dumps([track.uri for track in tracks])
+    print("TRACKS", tracks_json)
+    return render(request, "preview_playlist.html", {"tracks": tracks, "tracks_json": tracks_json})
 
 def preview_playlist_test_view(request):
     return render(request, "preview_playlist.html", {"tracks": [
@@ -120,4 +99,18 @@ def preview_playlist_test_view(request):
 
 
 def create_playlist_view(request):
-    pass
+
+    sp = spotify_app.for_user(request.user)
+
+    tracks = json.loads(request.POST["tracks"])
+    title = request.POST["title"]
+
+    playlist = create_playlist(sp, title=title, track_uris=tracks)
+    print("PLAYLIST", playlist)
+    playlist_url = playlist["external_urls"]["spotify"]
+    messages.success(
+        request, mark_safe(
+            f"""<a href="{playlist_url}" target="_blank">{title}</a> playlist created !"""
+        )
+    )
+    return redirect(reverse("playlist_input"))

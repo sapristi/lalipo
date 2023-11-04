@@ -1,0 +1,41 @@
+{% extends 'bulma/base.html' %}
+{% load bulma_tags %}
+
+{% block content %}
+
+{% if request.user.is_anonymous %}
+
+  <div style="display: flex; align-items: center; gap: 0.3em;">You need to <a href="{% url 'spotify_login' %}" class="button is-primary"><div>login</div></a> before you can continue.</div>
+{% else %}
+<form action="{% url 'generate_playlist' %}" method="post">
+  {% csrf_token %}
+  <!-- {{ form | bulma }} -->
+  <div class="block" style="width: 100%; display: flex; gap: 3rem" >
+    <div style="flex-grow: 1">
+      {{ form.title | bulma }}
+      {{ form.raw_text | bulma }}
+    </div>
+    <div>
+      {{ form.no_preview | bulma }}
+      {{ form.input_type | bulma }}
+      <div class="message is-secondary">
+        <div class="message-body content">
+          <div class="has-text-dark" style="text-align: left">
+            Used to parse custom playlists found on the web:
+            <ul>
+              <li>
+                <a href="https://stonedcircus.com/" target="_blank">Stoned circus</a>
+              </li>
+              <li>
+                <a href="https://www.canalb.fr/lesplagesmusicales" target="_blank">Plages musicales</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="button is-primary my-button " type="submit"><div>Generate playlist</div></button>
+</form>
+{% endif %}
+{% endblock %}

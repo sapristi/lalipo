@@ -2,8 +2,9 @@
 {% load bulma_tags %}
 
 {% block content %}
-<div style="display: flex; justify-content: center; gap: 10%">
-  <div style="flex: 1">
+<h2 class="title">{{title}}</h2>
+<div style="display: flex; justify-content: center; gap: 3rem">
+  <div style="flex-grow: 1">
     <table class="table is-striped is-hoverable is-fullwidth">
       <thead>
         <tr>
@@ -24,6 +25,8 @@
   <div>
     <form action="{% url 'create_playlist' %}" method="post">
       {% csrf_token %}
+      <input type="hidden" name="tracks" value="{{ tracks_json }}">
+      <input type="hidden" name="title" value="{{ title }}">
       <button class="button is-primary my-button " type="submit"><div>Create playlist</div></button>
     </form>
   </div>
