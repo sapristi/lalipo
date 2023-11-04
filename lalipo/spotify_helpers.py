@@ -4,7 +4,7 @@ import itertools
 from django.conf import settings
 from allauth.socialaccount.models import SocialApp
 from spotipy import Spotify
-from lalipo.spotipy_cache import SparisonCacheHandler, CustomAuth
+from lalipo.spotipy_cache import SocialAppCacheHandler, CustomAuth
 
 class SpotifyApp:
     def __init__(self):
@@ -25,7 +25,7 @@ class SpotifyApp:
                 client_secret=self.client_secret,
                 redirect_uri=settings.HOST,
                 scope=self.scope,
-                cache_handler=SparisonCacheHandler(user=user),
+                cache_handler=SocialAppCacheHandler(user=user),
             )
         )
         return sp
