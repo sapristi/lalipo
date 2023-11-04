@@ -109,7 +109,7 @@ def create_playlist_view(request):
     playlist_url = playlist["external_urls"]["spotify"]
     messages.success(
         request, mark_safe(
-            f"""<a href="{playlist_url}" target="_blank">{title}</a> playlist created !"""
+            f"""Playlist <a href="{playlist_url}" target="_blank">{title}</a> created !"""
         )
     )
     return redirect(reverse("playlist_input"))
