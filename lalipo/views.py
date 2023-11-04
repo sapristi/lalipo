@@ -106,7 +106,6 @@ def create_playlist_view(request):
     title = request.POST["title"]
 
     playlist = create_playlist(sp, title=title, track_uris=tracks)
-    print("PLAYLIST", playlist)
     playlist_url = playlist["external_urls"]["spotify"]
     messages.success(
         request, mark_safe(

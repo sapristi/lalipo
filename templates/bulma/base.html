@@ -20,7 +20,7 @@
       <div class="hero-body">
         <div style="display: flex; justify-content: space-between">
           <a href="{% url 'playlist_input' %}" class="main-title">
-            <div class=""
+            <div>
               <p class="title" >
                 Lalipo
               </p>
@@ -41,7 +41,7 @@
             <div class="navbar-item has-dropdown is-hoverable">
               <div class="navbar-item navbar-item-skew">
                 <div>
-                  Logged in as <span class="has-text-weight-semibold">  <i class="fa-brands fa-spotify"></i> {{request.user}} </span>
+                  Logged in as <span class="has-text-weight-semibold"> {{request.user}} </span>
                 </div>
               </div>
 
