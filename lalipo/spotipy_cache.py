@@ -54,11 +54,11 @@ class CustomAuth(SpotifyOAuth):
         if token_info is None:
             return None
 
-        # if scopes don't match, then bail
-        if "scope" not in token_info or not self._is_scope_subset(
-                self.scope, token_info["scope"]
-        ):
-            raise Exception(f"Unexpected token scope:\n{self.scope}\n{token_info['scope']}")
+        # # if scopes don't match, then bail
+        # if "scope" not in token_info or not self._is_scope_subset(
+        #         self.scope, token_info["scope"]
+        # ):
+        #     raise Exception(f"Unexpected token scope:\n{self.scope}\n{token_info.get('scope', None)}")
 
         if self.is_token_expired(token_info):
             token_info = self.refresh_access_token(

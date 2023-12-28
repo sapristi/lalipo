@@ -48,6 +48,10 @@ class Artist(BaseModel):
     def __repr__(self):
         return self.name
 
+class ExternalUrls(BaseModel):
+    spotify: str
+
+
 class Track(BaseModel):
     artists: list[Artist]
     duration_ms: int
@@ -55,7 +59,7 @@ class Track(BaseModel):
     name: str
     track_number: int
     uri: str
-
+    external_urls: ExternalUrls
 
 
 class Album(BaseModel):
