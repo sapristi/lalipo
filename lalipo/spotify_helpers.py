@@ -73,9 +73,9 @@ class Album(BaseModel):
     uri: str
 
 
-def get_tracks_from_plages_musicales(sp, input: str):
+def get_tracks_from_plages_musicales(sp, lines: list[str]):
     print("Parsing plages musicales")
-    for line in input.splitlines():
+    for line in lines:
         artist, title = line.split("\t")
         if title.startswith("single :") or title.startswith("singles :"):
             title = title.split(":", maxsplit=1)[1].strip()
@@ -102,9 +102,9 @@ def get_tracks_from_plages_musicales(sp, input: str):
                 yield Track(**track)
 
 
-def get_tracks_from_stoned_circus(sp, input: str):
+def get_tracks_from_stoned_circus(sp, lines: list[str]):
     print("Parsing stoned circus")
-    for line in input.splitlines():
+    for line in lines:
         artist = ""
         track = ""
         add_to_track = False
@@ -124,10 +124,10 @@ def get_tracks_from_stoned_circus(sp, input: str):
             track = Track(**results["items"][0])
             yield track
 
-def get_tracks_auto(sp, input: str):
-    for line in input.splitlines():
+def get_tracks_auto(sp, lines: list[str]):
+    for line in lines:
         if "\t" in line:
-            artist, track = line.split("\t", maxsplit=1)
+            artist, track = [part.strip() for part in line.split("\t", maxsplit=1) ]
             search_term = f"artist:{artist} track:{track}"
         else:
             search_term = line

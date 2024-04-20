@@ -1,7 +1,7 @@
 from enum import Enum
 import json
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django import forms
 from django.urls import reverse
@@ -52,13 +52,14 @@ def generate_playlist_view(request):
 
     sp = spotify_app.for_user(request.user)
 
+    lines : list[str] = [line.strip() for line in raw_text.splitlines() if line]
     match input_type:
         case InputType.auto.name:
-            tracks = get_tracks_auto(sp, raw_text)
+            tracks = get_tracks_auto(sp, lines)
         case InputType.plages_musicales.name:
-            tracks = get_tracks_from_plages_musicales(sp, raw_text)
+            tracks = get_tracks_from_plages_musicales(sp, lines)
         case InputType.stoned_circus.name:
-            tracks = get_tracks_from_stoned_circus(sp, raw_text)
+            tracks = get_tracks_from_stoned_circus(sp, lines)
         case _:
             print(f"Could not parse '{input_type}'")
             return HttpResponse(status=400)
