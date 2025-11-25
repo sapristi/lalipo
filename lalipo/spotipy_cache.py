@@ -17,7 +17,9 @@ class SocialAppCacheHandler(CacheHandler):
         self.spotify_object = SocialToken.objects.get(account__provider="spotify", account__user=user)
         spotify_app = SocialApp.objects.first()
         if spotify_app:
-            self.scope = " ".join(spotify_app.settings["SCOPE"])
+            # Try new format first (lowercase 'scope'), fallback to old format (uppercase 'SCOPE')
+            scope_value = spotify_app.settings.get("scope", spotify_app.settings.get("SCOPE", []))
+            self.scope = " ".join(scope_value) if isinstance(scope_value, list) else scope_value
         else:
             self.scope = " ".join(settings.SOCIALACCOUNT_PROVIDERS["spotify"]["SCOPE"])
 
@@ -42,6 +44,7 @@ class SocialAppCacheHandler(CacheHandler):
         self.spotify_object.token_secret = token_info["refresh_token"]
         self.spotify_object.expires_at = datetime.fromtimestamp(token_info["expires_at"])
         # self.spotify_object.scope = token_info["scope"]
+        self.spotify_object.save()
 
 
 class CustomAuth(SpotifyOAuth):

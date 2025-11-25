@@ -169,10 +169,15 @@ AUTHENTICATION_BACKENDS = [
 # Provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
     'spotify': {
-        'APP': {
-            'client_id': os.environ["SPOTIFY_CLIENT_ID"],
-            'secret': os.environ["SPOTIFY_CLIENT_SECRET"],
-        },
+        'APPS': [
+            {
+                'client_id': os.environ["SPOTIFY_CLIENT_ID"],
+                'secret': os.environ["SPOTIFY_CLIENT_SECRET"],
+                'settings': {
+                    'scope': ['playlist-modify-public', 'playlist-modify-private']
+                }
+            }
+        ],
         "SCOPE": ["playlist-modify-public","playlist-modify-private"]
     }
 }

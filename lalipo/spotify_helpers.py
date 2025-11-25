@@ -10,13 +10,14 @@ class SpotifyApp:
     def __init__(self):
         self.scope = ['playlist-modify-public', 'playlist-modify-private']
 
-        spotify_app = SocialApp.objects.first()
+        # Not sure how useful that is
+        spotify_app = SocialApp.objects.filter(provider="spotify").first()
         if spotify_app:
-            self.client_id=spotify_app.client_id
-            self.client_secret=spotify_app.secret
+            self.client_id=spotify_app.settings.get('client_id')
+            self.client_secret=spotify_app.settings.get('secret')
         else:
-            self.client_id = settings.SOCIALACCOUNT_PROVIDERS["spotify"]["APP"]["client_id"]
-            self.client_secret = settings.SOCIALACCOUNT_PROVIDERS["spotify"]["APP"]["secret"]
+            self.client_id = settings.SOCIALACCOUNT_PROVIDERS["spotify"]["APPS"][0]["client_id"]
+            self.client_secret = settings.SOCIALACCOUNT_PROVIDERS["spotify"]["APPS"][0]["secret"]
 
     def for_user(self, user):
         sp = Spotify(
